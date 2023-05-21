@@ -11,19 +11,27 @@ const Card: FC<CardProps> = ({ user }) => {
   const [blocked, setBlocked] = useState(false);
 
   const handleExpand = () => {
-    setExpanded(!expanded);
+    if (!blocked) {
+      setExpanded(!expanded);
+    }
   };
 
-  const handleFollow = () => {
+  const handleFollow = (event: React.MouseEvent) => {
+    event.stopPropagation();
     setFollowing(!following);
   };
 
-  const handleBlock = () => {
+  const handleBlock = (event: React.MouseEvent) => {
+    event.stopPropagation();
     setBlocked(!blocked);
   };
 
   return (
-    <div className="group cursor-pointer">
+    <div
+      className={`group ${
+        blocked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+      }`}
+    >
       <div
         className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
         onClick={handleExpand}
@@ -36,28 +44,54 @@ const Card: FC<CardProps> = ({ user }) => {
           }`}
         />
       </div>
-      <h3 className="mt-4 text-lg text-gray-700">{user.display_name}</h3>
-      <p className="mt-1 text-sm font-medium text-gray-900">
-        Reputation: {user.reputation}
-      </p>
+      <h3 className="mt-4 text-sm text-gray-700">
+        {user.display_name}
+        {following && (
+          <span className="ml-2 text-green-500" title="Following">
+            &#10003;
+          </span>
+        )}
+      </h3>
       {expanded && (
         <>
-          <button
-            className={`mt-2 px-2 py-1 rounded ${
-              following ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
-            }`}
-            onClick={handleFollow}
-          >
-            {following ? 'Following' : 'Follow'}
-          </button>
-          <button
-            className={`mt-2 ml-2 px-2 py-1 rounded ${
-              blocked ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black'
-            }`}
-            onClick={handleBlock}
-          >
-            {blocked ? 'Blocked' : 'Block'}
-          </button>
+          <p className="mt-1 text-lg font-medium text-gray-900">
+            Reputation: {user.reputation}
+          </p>
+          <p className="mt-1 text-lg font-medium text-gray-900">
+            Location: {user.location}
+          </p>
+          {!blocked ? (
+            <>
+              {following ? (
+                <button
+                  className="mt-2 px-2 py-1 rounded bg-blue-500 text-white"
+                  onClick={handleFollow}
+                >
+                  Unfollow
+                </button>
+              ) : (
+                <button
+                  className="mt-2 px-2 py-1 rounded bg-green-500 text-white"
+                  onClick={handleFollow}
+                >
+                  Follow
+                </button>
+              )}
+              <button
+                className="mt-2 ml-2 px-2 py-1 rounded bg-yellow-500 text-black"
+                onClick={handleBlock}
+              >
+                Block
+              </button>
+            </>
+          ) : (
+            <button
+              className="mt-2 px-2 py-1 rounded bg-gray-300 text-gray-500 cursor-not-allowed"
+              disabled
+            >
+              Blocked
+            </button>
+          )}
         </>
       )}
     </div>
