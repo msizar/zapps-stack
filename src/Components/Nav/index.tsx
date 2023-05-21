@@ -7,8 +7,6 @@ const Nav: React.FC = () => {
         <span className="App-logo pr-2">🤖</span>
         Stackerz
       </h1>
-
-      {/* Add your navigation links or other components here */}
     </nav>
   );
 };
