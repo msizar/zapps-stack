@@ -6,7 +6,7 @@ Zepz Stack is a React application for managing and displaying StackOverflow user
 
 1. Clone the repository:
   ```shell 
-  git clone https://github.com/your-username/zepz-stack.git 
+  git clone https://github.com/msizar/zapps-stack
   ```
 
 2. Clone the repository:
