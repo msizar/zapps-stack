@@ -2,7 +2,7 @@ import React from 'react';
 
 const Nav: React.FC = () => {
   return (
-    <nav className="sticky top-0 bg-gray-900 text-white py-4 px-8">
+    <nav className="sticky top-0 bg-gray-900 z-30 text-white py-4 px-8">
       <h1 className="flex text-4xl font-bold">
         <span className="App-logo pr-2">🤖</span>
         Stackerz

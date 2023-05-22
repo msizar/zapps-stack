@@ -44,7 +44,7 @@ const Card: FC<CardProps> = ({ user }) => {
           }`}
         />
       </div>
-      <h3 className="mt-4 text-sm text-gray-700">
+      <h3 className="mt-4 text-lg text-gray-700">
         {user.display_name}
         {following && (
           <span className="ml-2 text-green-500" title="Following">
@@ -52,14 +52,11 @@ const Card: FC<CardProps> = ({ user }) => {
           </span>
         )}
       </h3>
+      <p className="mt-1 text-sm font-medium text-gray-900">
+        Reputation: {user.reputation}
+      </p>
       {expanded && (
         <>
-          <p className="mt-1 text-lg font-medium text-gray-900">
-            Reputation: {user.reputation}
-          </p>
-          <p className="mt-1 text-lg font-medium text-gray-900">
-            Location: {user.location}
-          </p>
           {!blocked ? (
             <>
               {following ? (

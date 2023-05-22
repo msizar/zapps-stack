@@ -57,17 +57,25 @@ interface User {
 const UsersList = () => {
   const [users, setUsers] = useState<User[]>(mockData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(5);
+  const [hasMore, setHasMore] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    };
+
     const handleGetUsers = () => {
       getUsers(currentPage).then(
         (response) => {
           setUsers(response.data.items);
-          setTotalPages(response.data.total / response.data.page_size);
+          setHasMore(response.data.has_more);
           setIsLoading(false);
+          scrollToTop();
         },
         (error) => {
           setIsLoading(false);
@@ -85,35 +93,37 @@ const UsersList = () => {
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
+      setIsLoading(true);
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
+    if (hasMore) {
+      setIsLoading(true);
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
-  // if (errorMessage && !isLoading) {
-  //   return (
-  //     <div className="bg-white">
-  //       <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-16 lg:max-w-7xl lg:px-8">
-  //         <h2 className=" text-center capitalize text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-  //           ⛑️ {errorMessage}
-  //         </h2>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (errorMessage && !isLoading) {
+    return (
+      <div className="bg-white">
+        <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-16 lg:max-w-7xl lg:px-8">
+          <h2 className="text-center capitalize text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            Error: ⛑️ {errorMessage}
+          </h2>
+        </div>
+      </div>
+    );
+  }
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen">
-  //       <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white">
@@ -134,7 +144,7 @@ const UsersList = () => {
           <button
             className="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-4"
             onClick={handleNextPage}
-            disabled={currentPage === totalPages}
+            disabled={!hasMore}
           >
             Next
           </button>

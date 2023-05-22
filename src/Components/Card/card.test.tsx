@@ -11,14 +11,18 @@ const mockUser: User = {
 };
 
 describe('Card component', () => {
-  test('renders user information', () => {
+  test('renders user information', async () => {
     render(<Card user={mockUser} />);
 
-    const displayNameElement = screen.getByText(mockUser.display_name);
-    const reputationElement = screen.getByText(
-      `Reputation: ${mockUser.reputation}`
+    const displayNameElement = await screen.findByText(
+      new RegExp(mockUser.display_name, 'i')
     );
-    const locationElement = screen.getByText(`Location: ${mockUser.location}`);
+    const reputationElement = await screen.findByText(
+      new RegExp(`Reputation: ${mockUser.reputation}`, 'i')
+    );
+    const locationElement = await screen.findByText(
+      new RegExp(`Location: ${mockUser.location}`, 'i')
+    );
 
     expect(displayNameElement).toBeInTheDocument();
     expect(reputationElement).toBeInTheDocument();
